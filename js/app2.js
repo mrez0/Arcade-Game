@@ -27,6 +27,7 @@ class Enemy {
 
         //Setting y-positions of allowed lanes
         this.allowedY = [60, 140, 220];
+        this.allowedY = [60, 143, 226];
 
         //Setting y-position to random lane
         this.y = this.getRandomLane();
