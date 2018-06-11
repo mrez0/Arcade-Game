@@ -74,6 +74,20 @@ const gameBoundaries = {
     numberEnemyLanes: 3
 };
 
+class Game {
+    constructor() {
+
+    }
+
+    playerLose() {
+
+    }
+
+    playerWin() {
+
+    }
+}
+
 class Enemy {
     constructor() {
         this.sprite = settings.sprites.enemy;
