@@ -20,7 +20,8 @@
 const settings = {
     sprites: {
         enemy: 'images/enemy-bug.png',
-        player: 'images/char-boy.png'
+        player: 'images/char-boy.png',
+        key: 'images/Key.png'
     },
 
     difficulty: 'easy'
@@ -280,6 +281,41 @@ class Player {
     }
 }
 
+class Key {
+    constructor() {
+        this.sprite = settings.sprites.key;
+
+        //Setting width & height of player from sprite image once loaded
+        Resources.onReady( () => {
+            this.width = Resources.get( this.sprite ).width;
+            this.height = Resources.get( this.sprite ).height;
+
+            this.setup();
+        } );
+    }
+
+    setup() {
+        //Start at random box
+        [this.x, this.y] = this.getRandomBox();
+    }
+
+    getRandomBox() {
+        const randomX = ( Math.floor(Math.random() * 5) ) * gameBoundaries.columnWidth;
+        const randomY = ( Math.floor(Math.random() * 3) ) * gameBoundaries.rowHeight + gameBoundaries.topBoundary;
+        return [randomX, randomY];
+    }
+
+    update() {}
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    reset() {
+        this.setup();
+    }
+}
+
 //Creating new game
 const game = new Game();
 
@@ -294,6 +330,8 @@ for (let index = 0; index < numEnemies; index++) {
 //Creating player
 const player = new Player();
 
+//Creating key
+const key = new Key();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
