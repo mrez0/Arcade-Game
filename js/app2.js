@@ -76,6 +76,9 @@ const gameBoundaries = {
 
 class Game {
     constructor() {
+        this.score = 0;
+
+        this.updateScore();
 
         //Flag when game is stopped
         this.stopped = false;
@@ -99,7 +102,9 @@ class Game {
 
     }
 
-    showLoseMessage() {
+    updateScore() {
+        document.getElementById('score').textContent = this.score;
+    }
 
     showMessage( message, messageClass ) {
         const div = document.createElement('div');
