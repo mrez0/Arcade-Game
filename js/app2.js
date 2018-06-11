@@ -121,52 +121,85 @@ class Enemy {
     }
 
     getRandomLane() {
-        const randomIndex = Math.floor( Math.random() * 3 );
+        const randomIndex = Math.floor( Math.random() * gameBoundaries.numberEnemyLanes );
         return this.allowedY[ randomIndex ];
     }
 
     getRandomSpeed() {
-        return Math.floor(Math.random() * (6 - 2 + 1)) + 2;
+        //Setting maximum and minimum speed using setting & difficulty objects
+        const max = difficulty[settings.difficulty].enemy.enemySpeed.max;
+        const min = difficulty[settings.difficulty].enemy.enemySpeed.min;
+
+        return Math.floor(Math.random() * ( max - min + 1)) + min;
     }
 }
 
 class Player {
     constructor() {
-        this.sprite = 'images/char-boy.png';
+        this.sprite = settings.sprites.player;
 
         //Start at center bottom of grass
-        this.x = 202;
-        this.y = 392;
+        this.x = gameBoundaries.columnWidth * 2;
+        this.y = gameBoundaries.bottomBoundary;
+
+        //Setting playr speed
+        this.speedX = gameBoundaries.columnWidth;
+        this.speedY = gameBoundaries.rowHeight;
+
+        //Setting width & height of player from sprite image once loaded
+        Resources.onReady( () => {
+            this.width = Resources.get( this.sprite ).width;
+            this.height = Resources.get( this.sprite ).height;
+        } );
     }
 
-    update() {
-
-    }
+    update() {}
 
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
     handleInput( direction ) {
-        this.y += 1;
+        //Create local copies of x & y
+        let [x, y] = [this.x, this.y];
+
+        switch( direction ) {
+            case 'up':
+                y -= this.speedY;
+            break;
+            case 'down':
+                y += this.speedY;
+            break;
+            case 'left':
+                x -= this.speedX;
+            break;
+            case 'right':
+                x += this.speedX;
+            break;
+            default: //any other key => return
+                return;
+        }
+
+        //Check x & y positions to strict player movement within the game boundries
+        x = (x >= gameBoundaries.leftBoundary)               ? x : gameBoundaries.leftBoundary;
+        x = (x + this.width <= gameBoundaries.rightBoundary) ? x : gameBoundaries.rightBoundary - this.width;
+        y = (y >= gameBoundaries.topBoundary)                ? y : gameBoundaries.topBoundary;
+        y = (y <= gameBoundaries.bottomBoundary)             ? y : gameBoundaries.bottomBoundary;
+
+        this.x = x;
+        this.y = y;
     }
 }
 
 
 const allEnemies = [];
-allEnemies.push(new Enemy());
-allEnemies.push(new Enemy());
-allEnemies.push(new Enemy());
+const numEnemies = difficulty[settings.difficulty].enemy.numEnemies;
+
+for (let index = 0; index < numEnemies; index++) {
+    allEnemies.push( new Enemy() );
+}
 
 const player = new Player();
-
-
-
-
-
-
-
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
