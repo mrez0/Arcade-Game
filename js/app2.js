@@ -37,6 +37,18 @@ class Enemy {
 
     update() {
         this.x += this.speed;
+
+        //Check if reached end of canvas width
+        if( this.x >= 505 ) {
+            //Reset to beginning of canvas
+            this.x = -171;
+
+            //Choose different lane
+            this.y = this.getRandomLane();
+
+            //Choose different speed
+            this.speed = this.getRandomSpeed();
+        }
     }
 
     render() {
@@ -75,7 +87,6 @@ class Player {
 
 
 const allEnemies = [];
-allEnemies.push(new Enemy());
 allEnemies.push(new Enemy());
 allEnemies.push(new Enemy());
 allEnemies.push(new Enemy());
