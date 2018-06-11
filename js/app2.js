@@ -77,12 +77,22 @@ const gameBoundaries = {
 class Game {
     constructor() {
 
+        //Flag when game is stopped
+        this.stopped = false;
     }
 
     playerLose() {
-        this.showLoseMessage();
-        this.restartGame();
-        // this.reducePlayerScore();
+        this.score -= 1;
+        this.updateScore();
+        this.stopGame();
+        this.showMessage('You Loose :(', 'loose');
+        setTimeout(() => {
+            this.restartGame();
+        }, 2000);
+    }
+
+    stopGame() {
+        this.stopped = true;
     }
 
     playerWin() {
@@ -91,9 +101,19 @@ class Game {
 
     showLoseMessage() {
 
+    showMessage( message, messageClass ) {
+        const div = document.createElement('div');
+        div.textContent = message;
+        div.id = 'message';
+        div.classList.add(messageClass);
+        document.body.appendChild(div);
     }
 
     restartGame() {
+        document.getElementById('message').remove();
+        this.stopped = false;
+        player.reset();
+        allEnemies.forEach( enemy => enemy.reset() );
 
     }
 
@@ -103,29 +123,38 @@ class Enemy {
     constructor() {
         this.sprite = settings.sprites.enemy;
 
-        //Setting width & height of enemy from sprite image once loaded
-        Resources.onReady( () => {
-            this.width = Resources.get( this.sprite ).width;
-            this.height = Resources.get( this.sprite ).height;
-
-            //Start at left of canvas from outside. i.e. negative width of enemy
-            this.x = -1 * this.width;
-        } );
-
         //Setting y-positions of allowed lanes
         this.allowedY = [];
         for (let i = 0; i < gameBoundaries.numberEnemyLanes; i++) {
             this.allowedY.push( gameBoundaries.topBoundary + gameBoundaries.rowHeight * i );
         }
 
+        //Setting width & height of enemy from sprite image once loaded
+        Resources.onReady( () => {
+            this.width = Resources.get( this.sprite ).width;
+            this.height = Resources.get( this.sprite ).height;
+
+            this.setup();
+        } );
+        }
+
+    setup() {
+        //Start at left of canvas from outside. i.e. negative width of enemy
+        this.x = -1 * this.width;
+
         //Setting y-position to random lane
         this.y = this.getRandomLane();
 
-        //Setting random speed: from 2 to 6
+        //Setting random speed
         this.speed = this.getRandomSpeed();
     }
 
     update() {
+        //Check if game is stopped
+        if( game.stopped ) {
+            return;
+        }
+
         this.x += this.speed;
 
         //Check if reached end of canvas width
@@ -163,12 +192,26 @@ class Enemy {
 
         return Math.floor(Math.random() * ( max - min + 1)) + min;
     }
+
+    reset() {
+        this.setup();
+    }
 }
 
 class Player {
     constructor() {
         this.sprite = settings.sprites.player;
 
+        //Setting width & height of player from sprite image once loaded
+        Resources.onReady( () => {
+            this.width = Resources.get( this.sprite ).width;
+            this.height = Resources.get( this.sprite ).height;
+
+            this.setup();
+        } );
+    }
+
+    setup() {
         //Start at center bottom of grass
         this.x = gameBoundaries.columnWidth * 2;
         this.y = gameBoundaries.bottomBoundary;
@@ -176,12 +219,6 @@ class Player {
         //Setting playr speed
         this.speedX = gameBoundaries.columnWidth;
         this.speedY = gameBoundaries.rowHeight;
-
-        //Setting width & height of player from sprite image once loaded
-        Resources.onReady( () => {
-            this.width = Resources.get( this.sprite ).width;
-            this.height = Resources.get( this.sprite ).height;
-        } );
     }
 
     update() {}
@@ -191,6 +228,10 @@ class Player {
     }
 
     handleInput( direction ) {
+        if( game.stopped ) {
+            return;
+        }
+
         //Create local copies of x & y
         let [x, y] = [this.x, this.y];
 
@@ -224,7 +265,10 @@ class Player {
     getPlayerDimensions() {
         return [this.x, this.y, this.width, this.height];
     }
-}
+
+    reset() {
+        this.setup();
+    }
 
 const allEnemies = [];
 const numEnemies = difficulty[settings.difficulty].enemy.numEnemies;
