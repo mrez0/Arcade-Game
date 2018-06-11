@@ -141,7 +141,7 @@ class Enemy {
 
             this.setup();
         } );
-        }
+    }
 
     setup() {
         //Start at left of canvas from outside. i.e. negative width of enemy
@@ -278,7 +278,12 @@ class Player {
     reset() {
         this.setup();
     }
+}
 
+//Creating new game
+const game = new Game();
+
+//Creating enemies
 const allEnemies = [];
 const numEnemies = difficulty[settings.difficulty].enemy.numEnemies;
 
@@ -286,7 +291,9 @@ for (let index = 0; index < numEnemies; index++) {
     allEnemies.push( new Enemy() );
 }
 
+//Creating player
 const player = new Player();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
