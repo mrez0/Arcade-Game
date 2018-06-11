@@ -21,10 +21,11 @@ const settings = {
     sprites: {
         enemy: 'images/enemy-bug.png',
         player: 'images/char-boy.png',
-        key: 'images/Key.png'
+        key: 'images/Key.png',
+        obstacle: 'images/Rock.png'
     },
 
-    difficulty: 'medium'
+    difficulty: 'easy'
 };
 
 //Difficulty config
@@ -38,7 +39,7 @@ const difficulty = {
             }
         },
 
-        numObstacles: 0
+        numObstacles: 2
     },
     medium: {
         enemy: {
@@ -49,7 +50,7 @@ const difficulty = {
             }
         },
 
-        numObstacles: 2
+        numObstacles: 3
     },
     hard: {
         enemy: {
@@ -127,6 +128,7 @@ class Game {
         player.reset();
         allEnemies.forEach( enemy => enemy.reset() );
         key.reset();
+        rocks.forEach( rock => rock.reset() );
     }
 
 }
@@ -301,6 +303,18 @@ class Player {
             }
         }
 
+        //Check colliding with a rock
+        let isHitRock = false;
+        rocks.forEach( rock => {
+            if( x === rock.x && y === rock.y ) {
+                isHitRock = true;
+            }
+        } );
+
+        if( isHitRock ) {
+            return;
+        }
+
         this.x = x;
         this.y = y;
     }
@@ -354,6 +368,48 @@ class Key {
     }
 }
 
+class Rock {
+    constructor() {
+        this.sprite = settings.sprites.obstacle;
+
+        //Setting width & height of player from sprite image once loaded
+        Resources.onReady( () => {
+            this.width = Resources.get( this.sprite ).width;
+            this.height = Resources.get( this.sprite ).height;
+
+            this.setup();
+        } );
+    }
+
+    setup() {
+        //Set at random box. Avoid box which contains key
+        let x, y;
+
+        do {
+            [x, y] = this.getRandomBox();
+        } while( x === key.x && y === key.y );
+
+        this.x = x;
+        this.y = y;
+    }
+
+    getRandomBox() {
+        const randomX = ( Math.floor(Math.random() * 5) ) * gameBoundaries.columnWidth;
+        const randomY = ( Math.floor(Math.random() * 3) ) * gameBoundaries.rowHeight + gameBoundaries.topBoundary;
+        return [randomX, randomY];
+    }
+
+    update() {}
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    reset() {
+        this.setup();
+    }
+}
+
 //Creating new game
 const game = new Game();
 
@@ -368,10 +424,15 @@ for (let index = 0; index < numEnemies; index++) {
 //Creating key
 const key = new Key();
 
+const rocks = [];
+const numRocks = difficulty[settings.difficulty].numObstacles;
+
+for (let index = 0; index < numRocks; index++) {
+    rocks.push( new Rock() );
+}
+
 //Creating player
 const player = new Player();
-
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

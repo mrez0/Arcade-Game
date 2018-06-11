@@ -95,6 +95,11 @@ var Engine = (function(global) {
         });
 
         key.update();
+
+        rocks.forEach(function(rock) {
+            rock.update(dt);
+        });
+
         player.update();
     }
 
@@ -156,6 +161,11 @@ var Engine = (function(global) {
         });
 
         key.render();
+
+        rocks.forEach(function(rock) {
+            rock.render();
+        });
+
         player.render();
     }
 
@@ -178,6 +188,7 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/Key.png',
+        'images/Rock.png'
     ]);
     Resources.onReady(init);
 
