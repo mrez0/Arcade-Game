@@ -229,6 +229,9 @@ class Player {
         //Setting playr speed
         this.speedX = gameBoundaries.columnWidth;
         this.speedY = gameBoundaries.rowHeight;
+
+        //Player doesn't have the key to win the game
+        this.gotKey = false;
     }
 
     update() {}
@@ -242,10 +245,17 @@ class Player {
             return;
         }
 
-        this.movePlayer();
+        this.movePlayer( direction );
+        this.checkPlayerGotKey();
     }
 
-    movePlayer() {
+    checkPlayerGotKey() {
+        if( this.x === key.x && this.y === key.y ) {
+            this.gotKey = true;
+        }
+    }
+
+    movePlayer( direction ) {
         //Create local copies of x & y
         let [x, y] = [this.x, this.y];
 
@@ -309,7 +319,12 @@ class Key {
         return [randomX, randomY];
     }
 
-    update() {}
+    update() {
+        if( player.gotKey ) {
+            this.x = player.x;
+            this.y = player.y;
+        }
+    }
 
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -331,11 +346,13 @@ for (let index = 0; index < numEnemies; index++) {
     allEnemies.push( new Enemy() );
 }
 
+//Creating key
+const key = new Key();
+
 //Creating player
 const player = new Player();
 
-//Creating key
-const key = new Key();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
