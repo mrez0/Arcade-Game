@@ -1,21 +1,3 @@
-/*TODO:
-
-- Implement collision
-
-- Implement obstacles
-
-- Implement diamonds
-
-- Implement Score
-
-- Implement key first
-
-- Add comments
-
-- Refactor
-
-*/
-
 //Game Settings
 const settings = {
     sprites: {
@@ -38,7 +20,6 @@ const difficulty = {
                 max: 6
             }
         },
-
         numObstacles: 2
     },
     medium: {
@@ -49,7 +30,6 @@ const difficulty = {
                 max: 7
             }
         },
-
         numObstacles: 3
     },
     hard: {
@@ -60,7 +40,6 @@ const difficulty = {
                 max: 8
             }
         },
-
         numObstacles: 4
     }
 };
@@ -110,6 +89,9 @@ class Game {
 
         //Creating player
         player = new Player();
+
+        this.score = 0;
+        this.updateScore();
     }
 
     playerLose() {
@@ -240,7 +222,7 @@ class Enemy {
         //Setting maximum and minimum speed using setting & difficulty objects
         const max = difficulty[settings.difficulty].enemy.enemySpeed.max;
         const min = difficulty[settings.difficulty].enemy.enemySpeed.min;
-console.log(max);
+
         return Math.floor(Math.random() * ( max - min + 1)) + min;
     }
 
@@ -339,8 +321,7 @@ class Player {
                 y = gameBoundaries.topBoundary;
             }
         }
-        console.log(x,y);
-        console.log(this.width);
+
         //Check colliding with a rock
         let isHitRock = false;
         rocks.forEach( rock => {
@@ -456,17 +437,11 @@ class Rock {
     }
 }
 
-//Creating enemies
-let allEnemies;
 
-//Creating key
-let key;
-
-//Creating rocks / obstacles
-let rocks;
-
-//Creating player
-let player;
+let allEnemies; //All enemies array
+let key;        //Key we need to acquire in order to win
+let rocks;      //Rocks = obstacles
+let player;     //Us :D
 
 //Creating new game
 const game = new Game();
@@ -484,7 +459,7 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-//Listen for character setting buttons
+//Listen for choosing different character
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 const currentCharacterImg = document.getElementById('character-img');
