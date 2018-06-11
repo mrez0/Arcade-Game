@@ -80,12 +80,23 @@ class Game {
     }
 
     playerLose() {
-
+        this.showLoseMessage();
+        this.restartGame();
+        // this.reducePlayerScore();
     }
 
     playerWin() {
 
     }
+
+    showLoseMessage() {
+
+    }
+
+    restartGame() {
+
+    }
+
 }
 
 class Enemy {
