@@ -13,10 +13,10 @@ A web browser. The game can work offline
 ## How to play
 
 * Choose your character and difficulty from left column and press **Play**
-* Use arrow keys ← ↑ ↓ → to move your character
-* Catch the key and go to other side (water) to win
-* Avoid bugs (enemies) to catch you
-* Rocks are obstacles. Move around them
+* Use arrow keys **← ↑ ↓ →** to move your character
+* Catch the **key** and go to other side **(water)** to win
+* Avoid **bugs** (enemies) to catch you
+* **Rocks** are obstacles. Move around them
 
 ## Built With
 
