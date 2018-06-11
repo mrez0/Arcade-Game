@@ -1,6 +1,6 @@
 # Arcade Game
 
-An arcade game. Project developed for[Udacity Front-End Web Developer Nanodegree](https://eg.udacity.com/course/front-end-web-developer-nanodegree--nd001).
+An arcade game. Project developed for [Udacity Front-End Web Developer Nanodegree](https://eg.udacity.com/course/front-end-web-developer-nanodegree--nd001).
 
 ## Getting Started
 
