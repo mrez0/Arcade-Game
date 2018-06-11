@@ -128,6 +128,12 @@ class Enemy {
             //Choose different speed
             this.speed = this.getRandomSpeed();
         }
+
+        //Check if enemy collide with player
+        const[playerX, playerY, playerWidth, playerHeight] = player.getPlayerDimensions();
+        if( this.x >= playerX && this.x <= playerX + playerWidth && this.y >= playerY && this.y <= playerY + playerHeight ) {
+            playerLose();
+        }
     }
 
     render() {
@@ -203,8 +209,11 @@ class Player {
         this.x = x;
         this.y = y;
     }
-}
 
+    getPlayerDimensions() {
+        return [this.x, this.y, this.width, this.height];
+    }
+}
 
 const allEnemies = [];
 const numEnemies = difficulty[settings.difficulty].enemy.numEnemies;
