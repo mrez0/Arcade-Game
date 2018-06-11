@@ -29,12 +29,14 @@ class Enemy {
         this.allowedY = [60, 140, 220];
 
         //Setting y-position to random lane
-        this.y = this.getRandomLane();/*?*/
+        this.y = this.getRandomLane();
 
+        //Setting random speed: from 2 to 6
+        this.speed = this.getRandomSpeed();
     }
 
     update() {
-        // this.x += 5;
+        this.x += this.speed;
     }
 
     render() {
@@ -44,6 +46,10 @@ class Enemy {
     getRandomLane() {
         const randomIndex = Math.floor( Math.random() * 3 );
         return this.allowedY[ randomIndex ];
+    }
+
+    getRandomSpeed() {
+        return Math.floor(Math.random() * (6 - 2 + 1)) + 2;
     }
 }
 
@@ -69,6 +75,9 @@ class Player {
 
 
 const allEnemies = [];
+allEnemies.push(new Enemy());
+allEnemies.push(new Enemy());
+allEnemies.push(new Enemy());
 allEnemies.push(new Enemy());
 
 const player = new Player();
