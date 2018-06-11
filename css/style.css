@@ -1,6 +1,25 @@
 body {
     text-align: center;
 }
+
+.loose {
+    background: red;
+    color: white;
+    font-size: 2em;
+    width: 505px;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.win {
+    background: lightgreen;
+    color: black;
+    font-size: 2em;
+    width: 505px;
+    margin: auto;
+    border-radius: 10px;
+}
+
 .score-box {
     background: blue;
     color: white;
