@@ -2,6 +2,31 @@ body {
     text-align: center;
 }
 
+.settings-box {
+    position: fixed;
+    top: 0px;
+    left: 20px;
+}
+
+.settings-box,
+.difficulty-box {
+    margin: 10px auto;
+}
+
+.settings-box h2 {
+    margin-bottom: -50px;
+}
+
+#play-btn {
+    background: darkslategrey;
+    padding: 20px;
+    font-size: 2em;
+    color: white;
+    border-radius: 100%;
+    border: 1px solid black;
+    margin: 20px;
+}
+
 .loose {
     background: red;
     color: white;
