@@ -24,7 +24,7 @@ const settings = {
         key: 'images/Key.png'
     },
 
-    difficulty: 'easy'
+    difficulty: 'medium'
 };
 
 //Difficulty config
@@ -100,7 +100,13 @@ class Game {
     }
 
     playerWin() {
-
+        this.score += 1;
+        this.updateScore();
+        this.stopGame();
+        this.showMessage('You Win :)', 'win');
+        setTimeout(() => {
+            this.restartGame();
+        }, 2000);
     }
 
     updateScore() {
@@ -120,7 +126,7 @@ class Game {
         this.stopped = false;
         player.reset();
         allEnemies.forEach( enemy => enemy.reset() );
-
+        key.reset();
     }
 
 }
@@ -277,10 +283,23 @@ class Player {
         }
 
         //Check x & y positions to strict player movement within the game boundries
-        x = (x >= gameBoundaries.leftBoundary)               ? x : gameBoundaries.leftBoundary;
-        x = (x + this.width <= gameBoundaries.rightBoundary) ? x : gameBoundaries.rightBoundary - this.width;
-        y = (y >= gameBoundaries.topBoundary)                ? y : gameBoundaries.topBoundary;
-        y = (y <= gameBoundaries.bottomBoundary)             ? y : gameBoundaries.bottomBoundary;
+        x = (x >= gameBoundaries.leftBoundary)               ? x : gameBoundaries.leftBoundary;                 // Reached left boundary
+        x = (x + this.width <= gameBoundaries.rightBoundary) ? x : gameBoundaries.rightBoundary - this.width;   // Reached right boundary
+        y = (y <= gameBoundaries.bottomBoundary)             ? y : gameBoundaries.bottomBoundary;               // Reached bottom boundary
+
+        //Reached top boundary
+        if( y >= gameBoundaries.topBoundary ) {
+            y = y;
+        } else {
+            //If player reached top boundary (water) & got key
+            if( this.gotKey ) {
+                this.y = y;
+                game.playerWin();
+                return;
+            } else {
+                y = gameBoundaries.topBoundary;
+            }
+        }
 
         this.x = x;
         this.y = y;
