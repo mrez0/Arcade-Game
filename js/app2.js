@@ -176,8 +176,12 @@ class Enemy {
 
         //Check if enemy collide with player
         const[playerX, playerY, playerWidth, playerHeight] = player.getPlayerDimensions();
-        if( this.x >= playerX && this.x <= playerX + playerWidth && this.y >= playerY && this.y <= playerY + playerHeight ) {
-            playerLose();
+        if( this.x + this.width - playerWidth / 4 >= playerX &&
+            this.x <= playerX + playerWidth  - playerWidth / 4 &&
+            this.y >= playerY &&
+            this.y <= playerY
+        ) {
+            game.playerLose();
         }
     }
 
