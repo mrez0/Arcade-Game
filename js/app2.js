@@ -242,6 +242,10 @@ class Player {
             return;
         }
 
+        this.movePlayer();
+    }
+
+    movePlayer() {
         //Create local copies of x & y
         let [x, y] = [this.x, this.y];
 
