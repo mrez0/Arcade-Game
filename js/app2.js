@@ -1,16 +1,14 @@
 /*TODO:
 
-- Implement Enemy class:
-    - constructor
-    - update method
-    - render method
+- Implement collision
 
-- Implement Player class
-    - constructor
-    - update method
-    - render method
+- Implement obstacles
 
-- Add key listeners
+- Implement diamonds
+
+- Implement Score
+
+- Implement key first
 
 - Add comments
 
@@ -18,16 +16,82 @@
 
 */
 
+//Game Settings
+const settings = {
+    sprites: {
+        enemy: 'images/enemy-bug.png',
+        player: 'images/char-boy.png'
+    },
+
+    difficulty: 'easy'
+};
+
+//Difficulty config
+const difficulty = {
+    easy: {
+        enemy: {
+            numEnemies: 3,
+            enemySpeed: {
+                min: 2,
+                max: 6
+            }
+        },
+
+        numObstacles: 0
+    },
+    medium: {
+        enemy: {
+            numEnemies: 4,
+            enemySpeed: {
+                min: 3,
+                max: 7
+            }
+        },
+
+        numObstacles: 2
+    },
+    hard: {
+        enemy: {
+            numEnemies: 5,
+            enemySpeed: {
+                min: 4,
+                max: 8
+            }
+        },
+
+        numObstacles: 4
+    }
+};
+
+//Setting column width & row height for game background
+const gameBoundaries = {
+    columnWidth: 101,
+    rowHeight: 83,
+    topBoundary: 60,
+    bottomBoundary: 60 + 4 * 83, //topBoundary + 4 rows x rowHright
+    leftBoundary: 0,
+    rightBoundary: 5 * 101, // 5 columns x columnWidth
+    numberEnemyLanes: 3
+};
+
 class Enemy {
     constructor() {
-        this.sprite = 'images/enemy-bug.png';
+        this.sprite = settings.sprites.enemy;
 
-        //Start at edge of canvas from outside. i.e. -width of enemy
-        this.x = -171;
+        //Setting width & height of enemy from sprite image once loaded
+        Resources.onReady( () => {
+            this.width = Resources.get( this.sprite ).width;
+            this.height = Resources.get( this.sprite ).height;
+
+            //Start at left of canvas from outside. i.e. negative width of enemy
+            this.x = -1 * this.width;
+        } );
 
         //Setting y-positions of allowed lanes
-        this.allowedY = [60, 140, 220];
-        this.allowedY = [60, 143, 226];
+        this.allowedY = [];
+        for (let i = 0; i < gameBoundaries.numberEnemyLanes; i++) {
+            this.allowedY.push( gameBoundaries.topBoundary + gameBoundaries.rowHeight * i );
+        }
 
         //Setting y-position to random lane
         this.y = this.getRandomLane();
